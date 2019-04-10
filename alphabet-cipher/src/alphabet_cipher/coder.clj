@@ -4,21 +4,30 @@
 (defn char-map []
   (map char (range 97 (+ 97 26))))
 
-(defn cipher [m k]
+(defn encrypt [m k]
   (let [chars (apply str (char-map))
         mx (index-of chars m)
         kx (index-of chars k)
-        r (+ mx kx)]
-    (if (< r 26)
-      (nth chars r)
+        c (+ mx kx)]
+    (if (< c 26)
+      (nth chars c)
       (do
-        (nth chars (rem r 26))))))
+        (nth chars (rem c 26))))))
+
+(defn decrypt [k c]
+  (let [chars (apply str (char-map))
+        kx (index-of chars k)
+        cx (index-of chars c)
+        m (- cx kx)]
+    (if (< m 0)
+      (nth chars (+ 26 m))
+      (nth chars m))))
 
 (defn encode [keyword message]
-  (apply str (map cipher (cycle keyword) message)))
+  (apply str (map encrypt (cycle keyword) message)))
 
 (defn decode [keyword message]
-  "decodeme")
+  (apply str (map decrypt (cycle keyword) message)))
 
 (defn decipher [cipher message]
   "decypherme")
